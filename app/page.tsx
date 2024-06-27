@@ -1,4 +1,5 @@
-import { Suspense } from 'react';
+"use client"
+import { Suspense, useState } from 'react';
 import { unstable_noStore as noStore } from 'next/cache';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -41,17 +42,54 @@ const skills = [
   {
     title: 'Web Technologies',
     items: [
-      {img: '/next.svg', name: 'NextJS'},{img:'/nestjs.svg',name:'NestJS'},{img:'/fastapi.svg',name:'FastAPI'},{img:'/flask.svg',name:'Flask'},{img:'/express.svg', name:'ExpressJS'},
+      {img: '/next.svg', name: 'NextJS'},{img:'/nestjs.svg',name:'NestJS'},{img:'/fastapi.svg',name:'FastAPI'},{img:'/flask.svg',name:'Flask'},{img:'/express.svg', name:'ExpressJS'},{img:'/postgres.svg', name:'Postgres'},{img:'/mongodb.svg', name:'MongoDB'},{img:'/graphql.svg', name:'GraphQL'}
     ]
   },
   {
     title: 'DevOps and Cloud',
     items: [
-      {img: '/docker.svg', name: 'Docker'},{img:'/terraform.svg',name:'Terraform'},{img:'/lambda.svg',name:'AWS Lambda'},{img:'/serverless.svg',name:'serverless'},{img:'/express.svg', name:'ExpressJS'},
+      {img: '/docker.svg', name: 'Docker'},{img:'/terraform.svg',name:'Terraform'},{img:'/lambda.svg',name:'AWS Lambda'},{img:'/serverless.svg',name:'serverless'},{img:'/ec2.svg',name:'AWS EC2'},{img:'/jenkins.svg',name:'Jenkins'},{img:'/kubernetes.svg',name:'Kubernetes'},{img:'/vercel.svg',name:'Vercel'},{img:'/app-service.svg',name:'Azure App Service'},{img:'/function-app.svg',name:'Azure Function App'}
+    ]
+  },
+  {
+    title: 'Scripting & Automation',
+    items: [
+      {img: '/jupyter.svg', name: 'Jupyter Lab'},{img:'/linux.svg',name:'Linux'},{img:'/selenium.svg',name:'Selenium'},{img:'/colab.svg',name:'Google Colab'}
+    ]
+  },
+  {
+    title: 'Generative AI',
+    items: [
+      {img:'/openai.svg',name:'OpenAI'},{img:'/huggingface.svg',name:'Hugging Face'},{img:'/langchain.svg',name:'LangChain'},{img: '/cosmos-db.svg', name: 'Azure CosmosDB'},{img:'/ai-search.svg',name:'Azure AI Search'},{img:'/sagemaker.svg',name:'AWS Sagemaker'},{img:'/opensearch.svg',name:'AWS OpenSearch'},
     ]
   }
 ];
 
+const CollapsibleCard = ({item1,key1}) =>{
+
+  const [isOpen, setIsOpen] = useState(true);
+
+
+  return <>
+    <div className='shadow border rounded-lg py-4 px-4' key={key1}>
+      <div className='flex justify-between items-center cursor-pointer' onClick={()=>setIsOpen(state=>!state)} >
+        <p className='text-xs font-bold text-gray-500 uppercase'>{item1.title}</p>
+        <img className='' src='/chevron-down.svg' width="15" height="15" />
+      </div>
+      <div className={`${isOpen ? 'show' : 'hidden'}`}> 
+        <div className='flex gap-3 flex-wrap mt-2'>
+          {item1.items.map((item2,key2)=>
+            <div className='border border-neutral-200 rounded bg-neutral-50 px-3 py-2 flex items-center' key={key2}>
+              <img src={item2.img} width="25" height="25" />
+              <div className='h-[calc(100%)] w-[2px] max-w-[2px] bg-gray-300 mx-3'></div>
+              <p className='text-sm font-semibold text-[#3A4750]'>{item2.name}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </>
+}
 
 export default function Page() {
   return (
@@ -120,20 +158,7 @@ export default function Page() {
       </div>
       <div className='flex flex-col gap-4'>
         {skills.map((item1,key1)=>
-          <div className='shadow border rounded-lg py-5 px-4' key={key1}>
-            <p className='mb-2 text-xs font-bold text-gray-500 uppercase'>{item1.title}</p>
-            <div>
-              <div className='flex gap-3 flex-wrap'>
-                {item1.items.map((item2,key2)=>
-                  <div className='border border-neutral-200 rounded bg-neutral-50 px-3 py-2 flex items-center' key={key2}>
-                    <img src={item2.img} width="25" height="25" />
-                    <div className='h-[calc(100%)] w-[2px] max-w-[2px] bg-gray-300 mx-3'></div>
-                    <p className='text-sm font-semibold text-[#3A4750]'>{item2.name}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <CollapsibleCard item1={item1} key1={key1} key={key1} />
         )}
       </div>
       <div className="my-8 flex w-full flex-row space-x-2 overflow-x-auto">
